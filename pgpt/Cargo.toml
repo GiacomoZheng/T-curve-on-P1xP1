@@ -1,0 +1,18 @@
+[package]
+name = "pgpt"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]  # 生成 WebAssembly 代码
+
+[dependencies]
+nalgebra = "0.33"
+wasm-bindgen = "0.2"
+serde-wasm-bindgen = "0.6"
+plotly = { version = "0.12.1", features = ["wasm"] }
+web-sys = { version = "0.3", features = ["Window", "Document", "Element"] }
+# getrandom = { version = "0.3", features = ["wasm_js"] }
+
+[profile.release]
+opt-level = "s"  # 使 Wasm 文件更小
