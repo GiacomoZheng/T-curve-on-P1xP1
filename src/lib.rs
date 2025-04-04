@@ -1,7 +1,6 @@
 use wasm_bindgen::prelude::*;
 use nalgebra::{Matrix2, Vector2, vector};
 
-
 struct Config {
     a: f64,
     k: f64,
@@ -45,35 +44,35 @@ fn xy(config : &Config, t: f64) -> Point {
     Point(vx[0]/vx[1], vy[0]/vy[1])
 }
 
-fn compute_curve(config : &Config, t_values: &Vec<f64>) -> (Vec<f64>, Vec<f64>) {
-    let mut x_vals = Vec::new();
-    let mut y_vals = Vec::new();
+fn compute_curve(config : &Config, t_values: impl Iterator<Item = f64>) -> (Vec<f64>, Vec<f64>) {
+    let mut x_values = Vec::new();
+    let mut y_values = Vec::new();
 
-    for &t in t_values {
+    for t in t_values {
         let (x, y) = xy(config, t).into_coord(config.k);
-        x_vals.push(x);
-        y_vals.push(y);
+        x_values.push(x);
+        y_values.push(y);
     }
 
-    (x_vals, y_vals)
+    (x_values, y_values)
 }
 
 #[wasm_bindgen]
-pub fn get_plot_data(a : f64, k : f64, vx : f64, vy : f64) -> JsValue {
-    let config = Config::from_f64(a, k, vx, vy);
+pub fn get_plot_data(a : f64, k : f64, x0 : f64, y0 : f64) -> JsValue {
+    let config = Config::from_f64(a, k, x0, y0);
 
-    let t_neg: Vec<f64> = (-500..-1).map(|i| i as f64 / 100.0).collect();
-    let t_pos: Vec<f64> = (1..500).map(|i| i as f64 / 100.0).collect();
+    let t_neg : Vec<f64> = (-500..-1).map(|i| i as f64 / 100.0).collect();
+    let t_pos : Vec<f64>= (1..500).map(|i| i as f64 / 100.0).collect();
 
-    let (x_neg, y_neg) = compute_curve(&config, &t_neg);
-    let (x_pos, y_pos) = compute_curve(&config, &t_pos);
+    let (x_neg, y_neg) = compute_curve(&config, t_neg.iter().map(|&e| e));
+    let (x_pos, y_pos) = compute_curve(&config, t_pos.iter().map(|&e| e));
 
-    let plot_data = serde_wasm_bindgen::to_value(&vec![
-        (x_neg, y_neg, "green", "Negative t"),
-        (x_pos, y_pos, "red", "Positive t"),
+    let data = serde_wasm_bindgen::to_value(&vec![
+        (x_neg, y_neg, t_neg, "Negative t"),
+        (x_pos, y_pos, t_pos, "Positive t"),
     ]).unwrap();
 
-    plot_data
+    data
 }
 
 #[cfg(test)]
@@ -82,22 +81,22 @@ mod tests {
 
     #[test]
     fn test_compute_curve() {
-        let config = Config::from_f64(1.0, 0.5, 1.0, 0.0);
+        let config = Config::from_f64(1.0, 0.5, 0.0, 1.0);
         let t_values = vec![0.1, 1.0, 2.0];
-        let (x_vals, y_vals) = compute_curve(&config, &t_values);
+        let (x_values, y_values) = compute_curve(&config, t_values.into_iter());
         
         // 测试特定点的计算结果
-        assert!((x_vals[0] - (-0.458175844698613)).abs() < 0.01);
-        assert!((y_vals[0] - (-0.4542164326822591)).abs() < 0.01);
+        assert!((x_values[0] - (-0.458175844698613)).abs() < 0.01);
+        assert!((y_values[0] - (-0.4542164326822591)).abs() < 0.01);
         
-        assert!((x_vals[1] - (0.0)).abs() < 0.01);
-        assert!((y_vals[1] - (0.46211715726000974)).abs() < 0.01);
+        assert!((x_values[1] - (0.0)).abs() < 0.01);
+        assert!((y_values[1] - (0.46211715726000974)).abs() < 0.01);
         
-        assert!((x_vals[2] - (0.9051482536448665)).abs() < 0.01);
-        assert!((y_vals[2] - (0.9981778976111987)).abs() < 0.01);
+        assert!((x_values[2] - (0.9051482536448665)).abs() < 0.01);
+        assert!((y_values[2] - (0.9981778976111987)).abs() < 0.01);
         
         // 测试红绿线是否重合
-        let config = Config::from_f64(1.3, 0.5, 1.0, 0.0);
+        let config = Config::from_f64(1.3, 0.5, 0.0, 1.0);
 
         for t in (1..500).map(|i| i as f64 / 100.0) {
             let (px, py) = xy(&config, t).into_coord(0.5);

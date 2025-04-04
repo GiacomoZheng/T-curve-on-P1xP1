@@ -59,9 +59,9 @@ def segments_by(a):
 
     return segments_neg, segments_pos
 
-# print(*into_coord(*xy(1, 0.1)))
-# print(*into_coord(*xy(1, 1.0)))
-# print(*into_coord(*xy(1, 2.0)))
+print(*into_coord(*xy(1, 0.1)))
+print(*into_coord(*xy(1, 1.0)))
+print(*into_coord(*xy(1, 2.0)))
 
 # ============= 绘图 =============
 fig, ax = plt.subplots(figsize=(7,6))
