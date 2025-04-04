@@ -1,0 +1,15 @@
+{
+  "name": "t-curve-pic",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "t_curve_pic_bg.wasm",
+    "t_curve_pic.js",
+    "t_curve_pic.d.ts"
+  ],
+  "main": "t_curve_pic.js",
+  "types": "t_curve_pic.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
