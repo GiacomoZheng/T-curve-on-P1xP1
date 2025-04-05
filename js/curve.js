@@ -23,12 +23,12 @@ async function run() {
 
 		document.getElementById("a-value").textContent = `a = ${a.toFixed(1)}`;
 		document.getElementById("k-value").textContent = `k = ${k.toFixed(2)}`;
-		document.getElementById("x_0-value").textContent = `x_0 = ${(Math.atanh(x_0) / k).toFixed(3)}`;
-		document.getElementById("y_0-value").textContent = `y_0 = ${(Math.atanh(y_0) / k).toFixed(3)}`;
+		document.getElementById("x_0-value").textContent = `x₀ = ${(Math.atanh(x_0) / k).toFixed(3)}`;
+		document.getElementById("y_0-value").textContent = `y₀ = ${(Math.atanh(y_0) / k).toFixed(3)}`;
 
 		let plot = {
 			data : get_plot_data(a, k, x_0, y_0).map(([x, y, t_values, name]) => ({
-				name: name,
+				// name: name,
 				x: x,
 				y: y,
 				mode: "markers",
@@ -42,17 +42,37 @@ async function run() {
 						tickvals: [-5, -1, 0, 1, 5],  // 自定义刻度
 						ticktext: ["-∞", "-1", "0", "1", "+∞"]  // 显示的文字
 					}
-				}
+				},
+				showlegend: false,
+				legendgroup: name
 			})),
+			legend_pos : {
+				x: [null], y: [null],
+				mode: "markers",
+				marker: { color: "rgb(255,0,0)" },
+				name: "Positive t",
+				showlegend: true,
+				legendgroup: "Positive t"  // 和主 trace 绑定
+			},
+			legend_neg : {
+				x: [null], y: [null],
+				mode: "markers",
+				marker: { color: "rgb(0,255,0)" },
+				name: "Negative t",
+				showlegend: true,
+				legendgroup: "Negative t"  // 和主 trace 绑定
+			},
 			layout : {
+				margin: { t: 40, r: 100, b: 0, l: 25 },
 				title: {
 					text: "T-curve on ℙ¹ × ℙ¹",
-					font: {
-					  size: 20
-					},
-					xref: "paper",
-					x: 0.5,  // 居中（0 = 左，1 = 右）
-					xanchor: "center"
+					yref: 'paper',
+					y: 1,
+					automargin: true,
+					font: {size: 20},
+					// xref: "paper",
+					// x: 0.5,  // 居中（0 = 左，1 = 右）
+					// xanchor: "center"
 				},
 				legend: {
 					x: 0.5,
@@ -71,6 +91,7 @@ async function run() {
 					title: "y (tanh(ky))",
 					tickvals: [-1, 0, 1],
 					ticktext: ["-∞", "0", "+∞"],
+					scaleanchor: "x"
 				},
 				shapes: [
 					{
@@ -111,13 +132,25 @@ async function run() {
 				]
 			},
 		}
-		Plotly.newPlot("plot", plot.data, plot.layout);
+		Plotly.newPlot("plot", plot.data.concat([plot.legend_neg, plot.legend_pos]), plot.layout, {responsive: true});
 	}
 
 	slider_a.addEventListener("input", updatePlot);
 	slider_k.addEventListener("input", updatePlot);
 	slider_x_0.addEventListener("input", updatePlot);
 	slider_y_0.addEventListener("input", updatePlot);
+	// 重置按钮的事件处理
+    document.getElementById("reset-button").addEventListener("click", function() {
+		// 重置 sliders 的值
+		document.getElementById("slider_a").value = 1;
+		document.getElementById("slider_k").value = 0.5;
+		document.getElementById("slider_x_0").value = 0.0;
+		document.getElementById("slider_y_0").value = 0.4621171573;
+  
+		// 更新显示的值
+		updatePlot();
+	});
+
 	updatePlot();  // 初始绘制
 }
 run();

@@ -1,0 +1,44 @@
+/* Plot stays responsive */
+#plot {
+	aspect-ratio: 1;
+	max-width: 750px;
+	width: 100%;
+	height: auto;
+	margin: 0 auto; /* 水平居中 */
+	background: #f0f0f0;
+}
+
+input[type=range] {
+	max-width: 250px;
+	width: 100%;
+}
+
+/* Variables base layout */
+#variables {
+	/* max-width: 400px; */
+	min-width: 150px;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1rem;
+}
+
+/* ≥1100px: two-column variables */
+@media screen and (min-width: 1100px) {
+	#variables {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+/* <750px: move variables below plot */
+@media screen and (max-width: 750px) {
+	#plot {
+		max-width: 95%; /* 保证手机上水平方向适应 */
+		order: 1;
+	}
+
+	#variables {
+		order: 2;
+		grid-template-columns: 1fr;
+	}
+}
+
