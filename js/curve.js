@@ -27,6 +27,16 @@ async function run() {
 		document.getElementById("y_0-value").textContent = `y₀ = ${(Math.atanh(y_0) / k).toFixed(3)}`;
 
 		let plot = {
+			data_0 : {
+				x: [x_0],
+				y: [y_0],
+				mode: "markers",
+				marker: {
+					size: 6,
+					color: "white",
+				},
+				showlegend: false,
+			},
 			data : get_plot_data(a, k, x_0, y_0).map(([x, y, t_values, name]) => ({
 				// name: name,
 				x: x,
@@ -94,20 +104,6 @@ async function run() {
 					scaleanchor: "x"
 				},
 				shapes: [
-					{
-						type: 'circle',
-						xref: 'x',
-						yref: 'y',
-						x0: x_0 - 0.01,
-						y0: y_0 - 0.01,
-						x1: x_0 + 0.01,
-						y1: y_0 + 0.01,
-						opacity: 1,
-						fillcolor: 'white',
-						line: {
-							color: 'white'
-						}
-					},
 					// 对角线 y = x
 					{
 						type: "line",
@@ -132,7 +128,9 @@ async function run() {
 				]
 			},
 		}
-		Plotly.newPlot("plot", plot.data.concat([plot.legend_neg, plot.legend_pos]), plot.layout, {responsive: true});
+		Plotly.newPlot("plot", plot.data.concat([
+			plot.legend_neg, plot.legend_pos, plot.data_0
+		]), plot.layout, {responsive: true});
 	}
 
 	slider_a.addEventListener("input", updatePlot);
