@@ -1,24 +1,46 @@
 <!doctype html>
-<html class="no-js" lang="en" dir="ltr">
-
+<html lang="en" data-mdc-theme="light">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
   <title>T-curve on P¹ × P¹</title>
-  <link rel="stylesheet" href="css/foundation.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- MDC Web -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+  
   <link rel="stylesheet" href="css/app.css">
   <style>
     
   </style>
 </head>
+<body>
+  <div class="container mdc-typography">
+    <div class="title-box">
+      <h5 class="mdc-typography--headline5" style="margin: 0;">
+        T-curve on ℙ¹ × ℙ¹
+      </h5>
+      <button id="themeToggle" class="mdc-icon-button" aria-label="Toggle theme">
+        <i class="material-icons">dark_mode</i>
+      </button>
+    </div>
 
-<body class="grid-container">
-  <div class="grid-x grid-margin-x small-up-1 medium-up-2 align-top">
-    <!-- Plot Container -->
-    <div id="plot" class="cell small-12 medium-shrink"></div>
-    <!-- Variables -->
-    <div id="variables" class="cell small-12 medium-auto">
+    <div id="plot" class="plot-box"></div>
+
+    <div id="variables" class="variables-box">
+      <!-- <div class="mdc-slider">
+        <input class="mdc-slider__input" type="range" id="slider_a" min="-5" max="5" step="0.1" value="1">
+        <div class="mdc-slider__track">
+          <div class="mdc-slider__track--inactive"></div>
+          <div class="mdc-slider__track--active">
+            <div class="mdc-slider__track--active_fill"></div>
+          </div>
+        </div>
+        <div class="mdc-slider__thumb">
+          <div class="mdc-slider__thumb-knob"></div>
+        </div>
+      </div>
+       -->
       <div>
         <input type="range" id="slider_a" min="-5" max="5" step="0.1" value="1"><br/>
         <span id="a-value"></span>
@@ -36,21 +58,25 @@
         <span id="y_0-value"></span>
       </div>
 
-      <div>
-        <button id="reset-button" class="button">RESET</button>
+      <div class="mdc-touch-target-wrapper">
+        <button id="reset-button" class="mdc-button mdc-button--unelevated">
+          <span class="mdc-button__ripple"></span>
+          <span class="mdc-button__touch"></span>
+          <span class="mdc-button__focus-ring"></span>
+          <span class="mdc-button__label">RESET</span>
+        </button>
       </div>
     </div>
   </div>
-
+  
   <script src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>
   <script type="module" src="./js/curve.js"></script>
-  <script src="js/vendor/jquery.js"></script>
-  <script src="js/vendor/what-input.js"></script>
-  <script src="js/vendor/foundation.min.js"></script>
+
+  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
   <script>
-    $(document).foundation();
+    // 初始化所有 MDC 组件
+    mdc.autoInit();
   </script>
 
 </body>
-
 </html>

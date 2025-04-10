@@ -1,10 +1,30 @@
+body {
+	margin: 0;
+	font-family: Roboto, sans-serif;
+	background-color: var(--mdc-theme-background, #ffffff);
+	color: var(--mdc-theme-on-background, #000000);
+}
+
+.container {
+	max-width: 800px;
+	margin: auto;
+	padding: 1rem;
+}
+
+.title-box {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
 /* Plot stays responsive */
-#plot {
+.plot-box {
 	aspect-ratio: 1;
-	max-width: 750px;
+	max-width: 600px;
 	width: 100%;
 	height: auto;
-	margin: 0 auto; /* 水平居中 */
+	margin: 0 auto;
+	/* 水平居中 */
 	background: #f0f0f0;
 }
 
@@ -14,31 +34,17 @@ input[type=range] {
 }
 
 /* Variables base layout */
-#variables {
-	/* max-width: 400px; */
+.variables-box {
 	min-width: 150px;
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: 1rem;
 }
 
-/* ≥1100px: two-column variables */
-@media screen and (min-width: 1100px) {
+/* ≥600px: two-column variables */
+@media screen and (min-width: 600px) {
 	#variables {
 		grid-template-columns: 1fr 1fr;
-	}
-}
-
-/* <750px: move variables below plot */
-@media screen and (max-width: 750px) {
-	#plot {
-		max-width: 95%; /* 保证手机上水平方向适应 */
-		order: 1;
-	}
-
-	#variables {
-		order: 2;
-		grid-template-columns: 1fr;
 	}
 }
 
